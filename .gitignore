@@ -1,0 +1,10 @@
+# OS metadata files
+*Zone.Identifier*
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Claude config
+.claude/

@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Navid Athallah</title>
+  <link rel="icon" type="image/x-icon" href="./assets/icons/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/icons/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="./assets/icons/favicon-512.png">
+  <link rel="apple-touch-icon" href="./assets/icons/favicon-512.png">
+  <meta name="description"
+    content="Personal portfolio of a solo designer and developer. Focused on simplicity, typography, and performance.">
+
+  <!-- Apply the stored theme before the first paint (no dark flash in light mode) -->
+  <script>
+    (function () {
+      try {
+        document.documentElement.classList.toggle(
+          "dark",
+          localStorage.getItem("portfolio-theme") !== "light"
+        );
+      } catch (e) {
+        document.documentElement.classList.add("dark");
+      }
+    })();
+  </script>
+
+  <!-- Inter & JetBrains Mono (self-hosted, latin subset) -->
+  <link rel="preload" href="./assets/fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="./assets/fonts/jetbrains-mono-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="./assets/css/fonts.css?v=3">
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="./assets/css/main.css?v=12">
+
+  <!-- Precompiled Tailwind (same output the Play CDN produced). Keep it after
+       main.css so the cascade order is unchanged. -->
+  <link rel="stylesheet" href="./assets/css/tailwind.css?v=2">
+
+  <noscript>
+    <style>
+      .rv { opacity: 1 !important; filter: none !important; transform: none !important; }
+    </style>
+  </noscript>
+</head>
+
+<body
+  class="bg-white dark:bg-[#09090b] text-neutral-900 dark:text-neutral-100 font-sans min-h-screen">
+
+  <!-- Ink Cursor Canvas -->
+  <canvas id="ink-cursor" class="ink-cursor" aria-hidden="true"></canvas>
+
+  <div class="relative z-10 max-w-2xl mx-auto px-5 sm:px-8 py-10 sm:py-20 md:py-24">
+
+    <!-- 1. Header & Identity -->
+    <header
+      class="flex items-start sm:items-center justify-between gap-4 pb-8 sm:pb-12 mb-8 sm:mb-12 border-b border-neutral-200 dark:border-neutral-800 rv" data-delay="50">
+      <div>
+        <h1 class="text-base sm:text-lg font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
+          Navid Athallah
+        </h1>
+        <p class="text-xs text-neutral-500 font-mono mt-0.5">
+          IT Enjoyer | AI Native Engineer
+        </p>
+      </div>
+
+      <div class="flex items-center gap-3 sm:gap-4 shrink-0">
+        <!-- Availability indicator -->
+        <div class="flex items-center gap-2 text-[11px] sm:text-xs font-mono text-neutral-500">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 status-dot shrink-0"></span>
+          <span class="hidden xs:inline">Available for work</span>
+        </div>
+
+        <!-- Monochrome Theme Switcher -->
+        <button type="button" id="theme-toggle" onclick="toggleTheme(event)" aria-label="Toggle theme"
+          class="relative w-8 h-8 rounded-md border border-neutral-200 dark:border-neutral-800 flex items-center justify-center text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 hover:border-neutral-400 dark:hover:border-neutral-600 overflow-hidden">
+          <svg class="sun-icon w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path stroke-linecap="round" d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+          <svg class="moon-icon w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- 2. Intro Statement -->
+    <section class="mb-12 sm:mb-16 rv" data-delay="160">
+      <p class="text-base sm:text-lg text-neutral-800 dark:text-neutral-200 leading-relaxed font-normal mb-3 sm:mb-4">
+        I build fullstack applications with a focus on clean architecture, performance, and thoughtful user experiences.
+      </p>
+      <p class="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed font-normal">
+        Currently exploring modern web stacks, scalable backend systems, and tools that make software development
+        simpler and more efficient.
+      </p>
+    </section>
+
+    <!-- 3. Selected Projects & Filter -->
+    <section class="mb-12 sm:mb-16 rv" data-delay="260">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+        <h2 class="text-xs uppercase font-mono tracking-wider text-neutral-400 dark:text-neutral-500">
+          Selected Work
+        </h2>
+
+        <!-- Simple Filter -->
+        <div class="flex items-center gap-1.5 text-xs font-mono pb-1 sm:pb-0">
+          <button type="button" data-filter="all" aria-pressed="true" aria-controls="projects-list"
+            class="filter-btn active px-2.5 py-1 rounded shrink-0">
+            All
+          </button>
+          <button type="button" data-filter="projects" aria-pressed="false" aria-controls="projects-list"
+            class="filter-btn px-2.5 py-1 rounded shrink-0">
+            Projects
+          </button>
+          <button type="button" data-filter="experiments" aria-pressed="false" aria-controls="projects-list"
+            class="filter-btn px-2.5 py-1 rounded shrink-0">
+            Experiments
+          </button>
+        </div>
+      </div>
+
+      <!-- Project List Container -->
+      <div id="projects-list">
+        <!-- Rendered by main.js -->
+      </div>
+    </section>
+
+    <!-- 4. Experience / Work History -->
+    <section class="mb-12 sm:mb-16 pt-8 border-t border-neutral-200 dark:border-neutral-800 rv">
+      <h2 class="text-xs uppercase font-mono tracking-wider text-neutral-400 dark:text-neutral-500 mb-6">
+        Experience
+      </h2>
+
+      <div class="space-y-4 text-xs sm:text-sm">
+        <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 sm:gap-4">
+          <div>
+            <span class="font-medium text-neutral-900 dark:text-neutral-100">Head of Health Division</span>
+            <span class="text-neutral-500 block sm:inline sm:before:content-['·'] sm:before:mx-1 text-xs">OSIS MAS
+              Al-Ma'tuq</span>
+          </div>
+          <span class="text-xs font-mono text-neutral-400 dark:text-neutral-500 shrink-0">
+            Mar 2025 — Jan 2026
+          </span>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 sm:gap-4">
+          <div>
+            <span class="font-medium text-neutral-900 dark:text-neutral-100">Videographer & Editor</span>
+            <span class="text-neutral-500 block sm:inline sm:before:content-['·'] sm:before:mx-1 text-xs">Creative Day
+              Exhibition</span>
+          </div>
+          <span class="text-xs font-mono text-neutral-400 dark:text-neutral-500 shrink-0">
+            Okt 2025
+          </span>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 sm:gap-4">
+          <div>
+            <span class="font-medium text-neutral-900 dark:text-neutral-100">Photographer & Videographer</span>
+            <span class="text-neutral-500 block sm:inline sm:before:content-['·'] sm:before:mx-1 text-xs">OSIS MAS
+              Al-Ma'tuq</span>
+          </div>
+          <span class="text-xs font-mono text-neutral-400 dark:text-neutral-500 shrink-0">
+            Jun 2025
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Education -->
+    <section class="mb-12 sm:mb-16 pt-8 border-t border-neutral-200 dark:border-neutral-800 rv">
+      <h2 class="text-xs uppercase font-mono tracking-wider text-neutral-400 dark:text-neutral-500 mb-6">
+        Education
+      </h2>
+
+      <div class="space-y-4 text-xs sm:text-sm">
+        <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 sm:gap-4">
+          <div>
+            <span class="font-medium text-neutral-900 dark:text-neutral-100">Politeknik IDN Bogor</span>
+            <span class="text-neutral-500 block sm:inline sm:before:content-['·'] sm:before:mx-1 text-xs">D4 Teknologi
+              Rekayasa Perangkat Lunak</span>
+          </div>
+          <span class="text-xs font-mono text-neutral-400 dark:text-neutral-500 shrink-0">
+            Agt 2026 — Sekarang
+          </span>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 sm:gap-4">
+          <div>
+            <span class="font-medium text-neutral-900 dark:text-neutral-100">MAS Al-Ma'tuq</span>
+            <span class="text-neutral-500 block sm:inline sm:before:content-['·'] sm:before:mx-1 text-xs">MIPA B</span>
+          </div>
+          <span class="text-xs font-mono text-neutral-400 dark:text-neutral-500 shrink-0">
+            Jul 2020 — Mei 2026
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Licenses & Certifications -->
+    <section class="mb-12 sm:mb-16 pt-8 border-t border-neutral-200 dark:border-neutral-800 rv">
+      <h2 class="text-xs uppercase font-mono tracking-wider text-neutral-400 dark:text-neutral-500 mb-6">
+        Licenses &amp; Certifications
+      </h2>
+
+      <div class="space-y-3 text-xs sm:text-sm">
+        <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 sm:gap-4">
+          <div>
+            <span class="font-medium text-neutral-900 dark:text-neutral-100">Kelas Konsep Dasar Pemrograman Berorientasi Objek di PHP</span>
+            <span class="text-neutral-500 block sm:inline sm:before:content-['·'] sm:before:mx-1 text-xs">Codepolitan</span>
+          </div>
+          <span class="text-xs font-mono text-neutral-400 dark:text-neutral-500 shrink-0">Okt 2026</span>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 sm:gap-4">
+          <div>
+            <span class="font-medium text-neutral-900 dark:text-neutral-100">Kelas PHP Native</span>
+            <span class="text-neutral-500 block sm:inline sm:before:content-['·'] sm:before:mx-1 text-xs">Codepolitan</span>
+          </div>
+          <span class="text-xs font-mono text-neutral-400 dark:text-neutral-500 shrink-0">Okt 2026</span>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 sm:gap-4">
+          <div>
+            <span class="font-medium text-neutral-900 dark:text-neutral-100">Kelas Belajar Git dari Nol Sampai Bisa</span>
+            <span class="text-neutral-500 block sm:inline sm:before:content-['·'] sm:before:mx-1 text-xs">Codepolitan</span>
+          </div>
+          <span class="text-xs font-mono text-neutral-400 dark:text-neutral-500 shrink-0">Okt 2026</span>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 sm:gap-4">
+          <div>
+            <span class="font-medium text-neutral-900 dark:text-neutral-100">Kelas PHP 8 dan MySQL: Panduan CRUD Lengkap</span>
+            <span class="text-neutral-500 block sm:inline sm:before:content-['·'] sm:before:mx-1 text-xs">Codepolitan</span>
+          </div>
+          <span class="text-xs font-mono text-neutral-400 dark:text-neutral-500 shrink-0">Okt 2026</span>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 sm:gap-4">
+          <div>
+            <span class="font-medium text-neutral-900 dark:text-neutral-100">Belajar Python Agentic AI</span>
+            <span class="text-neutral-500 block sm:inline sm:before:content-['·'] sm:before:mx-1 text-xs">WPU Course</span>
+          </div>
+          <span class="text-xs font-mono text-neutral-400 dark:text-neutral-500 shrink-0">Okt 2026</span>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 sm:gap-4">
+          <div>
+            <span class="font-medium text-neutral-900 dark:text-neutral-100">AI Agent for Programming</span>
+            <span class="text-neutral-500 block sm:inline sm:before:content-['·'] sm:before:mx-1 text-xs">Hacktiv8 Indonesia</span>
+          </div>
+          <span class="text-xs font-mono text-neutral-400 dark:text-neutral-500 shrink-0">Jul 2026</span>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 sm:gap-4">
+          <div>
+            <span class="font-medium text-neutral-900 dark:text-neutral-100">Memulai Pemrograman dengan Python</span>
+            <span class="text-neutral-500 block sm:inline sm:before:content-['·'] sm:before:mx-1 text-xs">Dicoding Indonesia</span>
+          </div>
+          <span class="text-xs font-mono text-neutral-400 dark:text-neutral-500 shrink-0">Jul 2026</span>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 sm:gap-4">
+          <div>
+            <span class="font-medium text-neutral-900 dark:text-neutral-100">Spec-Driven Development dengan Kiro</span>
+            <span class="text-neutral-500 block sm:inline sm:before:content-['·'] sm:before:mx-1 text-xs">Dicoding Indonesia</span>
+          </div>
+          <span class="text-xs font-mono text-neutral-400 dark:text-neutral-500 shrink-0">Jul 2026</span>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 sm:gap-4">
+          <div>
+            <span class="font-medium text-neutral-900 dark:text-neutral-100">Belajar Dasar Cloud dan Gen AI di AWS</span>
+            <span class="text-neutral-500 block sm:inline sm:before:content-['·'] sm:before:mx-1 text-xs">Dicoding Indonesia</span>
+          </div>
+          <span class="text-xs font-mono text-neutral-400 dark:text-neutral-500 shrink-0">Jul 2026</span>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 sm:gap-4">
+          <div>
+            <span class="font-medium text-neutral-900 dark:text-neutral-100">Belajar Membuat Front-End Web untuk Pemula</span>
+            <span class="text-neutral-500 block sm:inline sm:before:content-['·'] sm:before:mx-1 text-xs">Dicoding Indonesia</span>
+          </div>
+          <span class="text-xs font-mono text-neutral-400 dark:text-neutral-500 shrink-0">Jun 2026</span>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 sm:gap-4">
+          <div>
+            <span class="font-medium text-neutral-900 dark:text-neutral-100">Belajar Dasar Pemrograman Web</span>
+            <span class="text-neutral-500 block sm:inline sm:before:content-['·'] sm:before:mx-1 text-xs">Dicoding Indonesia</span>
+          </div>
+          <span class="text-xs font-mono text-neutral-400 dark:text-neutral-500 shrink-0">Jun 2026</span>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 sm:gap-4">
+          <div>
+            <span class="font-medium text-neutral-900 dark:text-neutral-100">Juara 2 Perlombaan Fotografi SMA Tingkat Nasional AISC-BPIBS 2026</span>
+            <span class="text-neutral-500 block sm:inline sm:before:content-['·'] sm:before:mx-1 text-xs">PT. Bintang Pelajar</span>
+          </div>
+          <span class="text-xs font-mono text-neutral-400 dark:text-neutral-500 shrink-0">Feb 2026</span>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 sm:gap-4">
+          <div>
+            <span class="font-medium text-neutral-900 dark:text-neutral-100">Sertifikat Tahfidz Al-Qur'an 30 Juz</span>
+            <span class="text-neutral-500 block sm:inline sm:before:content-['·'] sm:before:mx-1 text-xs">Kementerian Agama RI</span>
+          </div>
+          <span class="text-xs font-mono text-neutral-400 dark:text-neutral-500 shrink-0">Jan 2026</span>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 sm:gap-4">
+          <div>
+            <span class="font-medium text-neutral-900 dark:text-neutral-100">Belajar Dasar AI</span>
+            <span class="text-neutral-500 block sm:inline sm:before:content-['·'] sm:before:mx-1 text-xs">Dicoding Indonesia</span>
+          </div>
+          <span class="text-xs font-mono text-neutral-400 dark:text-neutral-500 shrink-0">Jan 2025</span>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 sm:gap-4">
+          <div>
+            <span class="font-medium text-neutral-900 dark:text-neutral-100">Belajar Dasar Pemrograman JavaScript</span>
+            <span class="text-neutral-500 block sm:inline sm:before:content-['·'] sm:before:mx-1 text-xs">Dicoding Indonesia</span>
+          </div>
+          <span class="text-xs font-mono text-neutral-400 dark:text-neutral-500 shrink-0">Des 2024</span>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 sm:gap-4">
+          <div>
+            <span class="font-medium text-neutral-900 dark:text-neutral-100">Sanad Hadits Arabain Al-Nawawi oleh Syekh Abdullah Ali Mursyid</span>
+            <span class="text-neutral-500 block sm:inline sm:before:content-['·'] sm:before:mx-1 text-xs">MAS Al-Ma'tuq</span>
+          </div>
+          <span class="text-xs font-mono text-neutral-400 dark:text-neutral-500 shrink-0">Nov 2024</span>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 sm:gap-4">
+          <div>
+            <span class="font-medium text-neutral-900 dark:text-neutral-100">HTML, CSS dan JavaScript: Pemula sampai Mahir</span>
+            <span class="text-neutral-500 block sm:inline sm:before:content-['·'] sm:before:mx-1 text-xs">Udemy</span>
+          </div>
+          <span class="text-xs font-mono text-neutral-400 dark:text-neutral-500 shrink-0">Jul 2024</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Toolkit -->
+    <section class="mb-12 sm:mb-16 pt-8 border-t border-neutral-200 dark:border-neutral-800 rv">
+      <h2 class="text-xs uppercase font-mono tracking-wider text-neutral-400 dark:text-neutral-500 mb-6">
+        Toolkit
+      </h2>
+
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono text-neutral-600 dark:text-neutral-400 leading-relaxed">
+        <div>
+          <span class="text-neutral-400 dark:text-neutral-500 block mb-1">Development</span>
+          <p>Go, Rust, TypeScript, Python, React, Tauri v2, MCP & RAG</p>
+        </div>
+        <div>
+          <span class="text-neutral-400 dark:text-neutral-500 block mb-1">Design</span>
+          <p>Canva, Affinity</p>
+        </div>
+        <div>
+          <span class="text-neutral-400 dark:text-neutral-500 block mb-1">Editing</span>
+          <p>CapCut, Davinci Resolve 16 (Basic), Snapseed, Lightroom (Basic)</p>
+        </div>
+        <div>
+          <span class="text-neutral-400 dark:text-neutral-500 block mb-1">Videography & Photography</span>
+          <p>Mobile, Mirrorless (Intermediate), Stabilizer Operation, Drone Camera (Basic)</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. Contact & Links -->
+    <section class="pt-8 border-t border-neutral-200 dark:border-neutral-800 rv">
+      <h2 class="text-xs uppercase font-mono tracking-wider text-neutral-400 dark:text-neutral-500 mb-4">
+        Contact
+      </h2>
+
+      <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed mb-6">
+        Feel free to reach out for new projects, questions, or just to say hello.
+      </p>
+
+      <div class="flex flex-wrap items-center gap-3 sm:gap-4 text-xs font-mono">
+        <a href="mailto:navidvkt@gmail.com"
+          class="font-medium text-neutral-900 dark:text-neutral-100 underline underline-offset-4 hover:opacity-75 transition-opacity break-all sm:break-normal">
+          navidvkt@gmail.com
+        </a>
+
+        <button type="button" id="copy-email" data-email="navidvkt@gmail.com"
+          class="px-2.5 py-1 rounded border border-neutral-200 dark:border-neutral-800 text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 hover:border-neutral-400 dark:hover:border-neutral-600 transition-colors shrink-0 active:scale-95">
+          Copy
+        </button>
+
+        <span id="copy-feedback" role="status" aria-live="polite"
+          class="text-emerald-500 dark:text-emerald-400 opacity-0 transition-opacity w-full sm:w-auto">
+          Copied to clipboard
+        </span>
+      </div>
+
+      <!-- Social Links -->
+      <div class="flex flex-wrap items-center gap-x-5 gap-y-2 mt-8 text-xs font-mono text-neutral-400">
+        <a href="https://github.com" target="_blank" rel="noopener noreferrer"
+          class="hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors">GitHub ↗</a>
+        <a href="https://x.com" target="_blank" rel="noopener noreferrer"
+          class="hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors">Twitter / X ↗</a>
+        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"
+          class="hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors">LinkedIn ↗</a>
+      </div>
+    </section>
+
+    <!-- 9. Footer -->
+    <footer
+      class="pt-12 sm:pt-16 mt-12 sm:mt-16 border-t border-neutral-200 dark:border-neutral-800 text-xs font-mono text-neutral-400 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 rv">
+      <span>© 2025 Navid Athallah</span>
+      <span>Zero Install • Pure Static</span>
+    </footer>
+
+  </div>
+
+  <script src="./assets/js/main.js?v=16"></script>
+</body>
+
+</html>
