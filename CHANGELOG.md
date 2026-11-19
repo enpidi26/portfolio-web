@@ -2,6 +2,13 @@
 
 ---
 
+## [v1.7] — 2026-11-19
+
+### Documentation
+- Rewrote `README.md` and `docs/README.md` in English with a professional structure, clearer setup and customization instructions, and a project structure overview.
+
+---
+
 ## [v1.6] — 2026-11-19
 
 ### Changed

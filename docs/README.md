@@ -1,90 +1,88 @@
-# Portfolio Web — Navid Athallah
+# Project Documentation — Portfolio
 
-![Thumbnail](./thumbnail.png)
+![Project thumbnail](./thumbnail.png)
 
-Dokumen ini menjelaskan website portofolio saya secara singkat: apa isinya, bagaimana cara kerjanya, dan bagaimana merawatnya ke depan.
+This document describes the site's content, interface behavior, and maintenance workflow. For setup, customization, and deployment, see the [root README](../README.md).
 
-Portofolio ini sengaja dibuat sebagai satu halaman. Di dalamnya terdapat profil, proyek, pengalaman, pendidikan, sertifikat, dan kontak. Pembaca tidak perlu berpindah halaman — cukup menggulir dari atas ke bawah. Tautannya cocok dipakai di bio, dilampirkan pada CV, atau dikirimkan kepada perekrut.
+## Page content
 
-## Isi halaman
+The portfolio is a single scrolling page:
 
-- **Profil** — nama, peran, status ketersediaan, dan pengantar singkat.
-- **Selected Work** — enam proyek, dengan filter All / Projects / Experiments.
-- **Experience, Education, Licenses & Certifications, Toolkit** — termasuk 17 sertifikat yang diurutkan dari yang terbaru.
-- **Contact** — alamat email, tombol salin, dan tautan sosial.
+- **Profile** — name, role, availability status, and a short introduction.
+- **Selected Work** — six projects with All / Projects / Experiments filters.
+- **Experience, Education, Licenses & Certifications, Toolkit** — includes 17 certifications, ordered newest first.
+- **Contact** — email address, copy button, and social links.
 
-## Dua detail yang saya perhatikan
+## Implementation notes
 
-**Kursor tinta.** Kursor digambar langsung di atas canvas: terdapat titik, lingkaran cahaya yang membesar ketika diarahkan ke tautan atau tombol, serta jejak kaligrafi yang memudar perlahan. Di perangkat sentuh, efeknya mengikuti jari dan menghilang dengan sendirinya setelah jari diangkat. Ketika tidak digunakan, proses gambarnya berhenti sehingga tidak membebani CPU.
+### Ink cursor
 
-**Transisi tema.** Ketika tema diganti, lingkaran tinta mengembang dari tombol pengubah tema menggunakan View Transitions API. Pada layar sempit, efeknya diganti menjadi crossfade agar tetap nyaman dilihat. Pilihan tema disimpan, sehingga tetap sama ketika halaman dibuka kembali.
+The cursor is drawn on a full-screen canvas above the page. It consists of a solid center dot, a translucent halo that expands over links and buttons, and a calligraphic trail that fades over 700 ms. On touch devices it follows the finger and fades out after release. Rendering pauses when the cursor is hidden or the pointer is idle, keeping idle CPU usage near zero.
 
-Selain itu, terdapat filter proyek, tombol salin email, dan animasi kemunculan saat menggulir. Seluruh animasi otomatis dinonaktifkan apabila pengunjung mengaktifkan pengaturan *reduce motion*.
+### Theme transition
 
-## Teknologi
+The theme switch uses the View Transitions API. On desktop, a circular ink bloom expands from the toggle button; on viewports 768 px and narrower, it is replaced with a short crossfade. The selected theme is stored in `localStorage` and applied by an inline script in `<head>` before first paint to prevent a flash of the wrong theme. Browsers without View Transitions fall back to a CSS color transition.
 
-Website ini dibangun dengan HTML, CSS, dan JavaScript tanpa framework. Tidak ada proses build dan tidak ada `npm install`; file-nya dapat langsung dibuka.
+The project filter, copy-to-clipboard feedback, and scroll-reveal animations are implemented in vanilla JavaScript. All motion is disabled when `prefers-reduced-motion` is active.
 
-- **Tailwind** sudah dikompilasi menjadi satu file di `assets/css/tailwind.css` (sekitar 13 KB), sehingga browser tidak perlu memuat compiler berukuran 400 KB.
-- **Inter dan JetBrains Mono** disimpan sendiri di `assets/fonts/` (subset latin, sekitar 80 KB) dan di-preload dari `index.html`. Tidak ada permintaan ke Google Fonts ketika halaman dibuka.
-- **Header keamanan** tersedia di `_headers` untuk Cloudflare Pages, mencakup CSP, HSTS, dan lain-lain.
-- Berdasarkan pengukuran di server lokal: halaman pertama tampil dalam sekitar 100 ms, penggunaan CPU saat diam sekitar 0%, dan tidak ada pergeseran tata letak.
+## Technology
 
-## Cara membuka
+- **Tailwind CSS** is precompiled into `assets/css/tailwind.css` (~13 KB) so the browser never downloads the in-browser compiler (~400 KB).
+- **Inter and JetBrains Mono** are self-hosted in `assets/fonts/` (latin subset, ~80 KB total) and preloaded from `index.html`. No requests are made to Google Fonts or any other third party.
+- **Security headers** for Cloudflare Pages live in `_headers` and cover CSP, HSTS, frame protection, MIME sniffing, and referrer policy.
+- Local measurements: first paint in roughly 100 ms, idle CPU near 0%, and no layout shift.
 
-Cara paling cepat adalah membuka `index.html` langsung dengan klik dua kali.
+## Running locally
 
-Apabila ingin mencoba dengan kondisi yang sama seperti di produksi, jalankan server lokal:
+Open `index.html` directly, or serve the directory:
 
 ```bash
 python -m http.server 8090
 ```
 
-kemudian buka `http://localhost:8090`.
+Then open <http://localhost:8090>. A local server is recommended because browsers can block custom fonts on `file://` pages.
 
-## Deploy
+## Deployment
 
-Karena seluruhnya berupa file statis, folder ini dapat diunggah ke Cloudflare Pages, GitHub Pages, Vercel, atau Netlify. Apabila menggunakan Cloudflare Pages, file `_headers` akan diterapkan secara otomatis.
+The site is static and can be uploaded to Cloudflare Pages, GitHub Pages, Vercel, or Netlify. With Cloudflare Pages, `_headers` is applied automatically.
 
-## Mengubah konten
+## Content updates
 
-- **Daftar proyek** berada pada array `PROJECTS` di `assets/js/main.js`.
-- **Teks pengalaman, pendidikan, dan sertifikat** berada di `index.html`.
-- Apabila menambahkan class Tailwind baru, jalankan proses kompilasi sekali:
+- **Projects** — edit the `PROJECTS` array in `assets/js/main.js`.
+- **Experience, education, and certifications** — edit `index.html`.
+- **Tailwind utilities** — after adding or removing classes, regenerate the stylesheet:
 
-  ```bash
-  npx tailwindcss@3 -c tailwind.config.js -i tailwind.input.css -o assets/css/tailwind.css --minify
-  ```
-
-  npx hanya mengunduh sementara dan tidak memasang apa pun secara permanen.
-
-## Struktur folder
-
-```text
-index.html                  halaman dan seluruh konten
-assets/css/main.css         gaya kustom: tema, kursor, animasi
-assets/css/fonts.css        @font-face font self-hosted
-assets/css/tailwind.css     Tailwind hasil kompilasi (jangan diedit manual)
-assets/js/main.js           data proyek, filter, tema, kursor tinta
-assets/fonts/               font yang disimpan sendiri (subset latin)
-assets/icons/               favicon
-docs/                       dokumentasi, screenshot, thumbnail, lisensi font
-docs/licenses/              lisensi Inter & JetBrains Mono (SIL OFL 1.1)
-_headers                    header keamanan & cache untuk Cloudflare Pages
-tailwind.config.js          konfigurasi untuk kompilasi ulang
-tailwind.input.css          entry point Tailwind
+```bash
+npx tailwindcss@3 -c tailwind.config.js -i tailwind.input.css -o assets/css/tailwind.css --minify
 ```
 
-## Tangkapan layar
+## Project structure
 
-| Desktop (gelap) | Desktop (terang) |
+```text
+index.html                  Page markup and static content
+assets/css/main.css         Theme, cursor, animations, and custom styles
+assets/css/fonts.css        @font-face declarations
+assets/css/tailwind.css     Compiled Tailwind output (do not edit)
+assets/js/main.js           Projects data, filtering, theme, and ink cursor
+assets/fonts/               Self-hosted fonts (latin subset)
+assets/icons/               Favicons
+docs/                       Documentation, screenshots, thumbnail, font licenses
+docs/licenses/              Inter and JetBrains Mono licenses (SIL OFL 1.1)
+_headers                    Security and cache headers for Cloudflare Pages
+tailwind.config.js          Tailwind configuration
+tailwind.input.css          Tailwind entry point
+```
+
+## Screenshots
+
+| Desktop (dark) | Desktop (light) |
 | --- | --- |
-| ![Desktop gelap](./screenshots/desktop-dark.png) | ![Desktop terang](./screenshots/desktop-light.png) |
+| ![Desktop dark](./screenshots/desktop-dark.png) | ![Desktop light](./screenshots/desktop-light.png) |
 
-| Mobile (gelap) |
+| Mobile (dark) |
 | --- |
-| ![Mobile](./screenshots/mobile-dark.png) |
+| ![Mobile dark](./screenshots/mobile-dark.png) |
 
----
+## License
 
-Kode dan konten di repositori ini dilindungi hak cipta. Repositori bersifat publik hanya untuk dilihat dan dievaluasi — bukan untuk dipakai ulang. Selengkapnya: [`../LICENSE`](../LICENSE).
+Copyright © 2026 Navid Athallah. All rights reserved. The repository is published for viewing and evaluation only; it may not be copied, modified, redistributed, or reused without prior written permission. See [`../LICENSE`](../LICENSE).

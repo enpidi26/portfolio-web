@@ -1,104 +1,139 @@
-# Minimalist Portfolio (Monochrome & Zero-Install)
+# Portfolio — Navid Athallah
 
-Website portofolio sederhana, elegan, dan bebas dari *gimmick* atau *AI slop*. Dirancang dengan fokus pada tipografi yang tenang, hierarki yang jelas, dan palet hitam-putih.
+A single-page personal portfolio built with plain HTML, CSS, and JavaScript. The design is deliberately minimal: a monochrome palette, restrained typography, and no runtime dependencies.
 
----
+![Portfolio preview](docs/screenshots/desktop-dark.png)
 
-## 🚀 Cara Menjalankan
+## Overview
 
-Website ini **100% Zero-Install** (tanpa perlu Node.js, npm, atau build tools).
-Cukup klik dua kali file **`index.html`** di komputer Anda, dan website langsung terbuka di browser favorit Anda.
+The site presents a complete professional profile on one page:
 
-> Catatan: sebagian browser membatasi font kustom saat halaman dibuka lewat `file://`.
-> Untuk tampilan yang persis seperti produksi, jalankan server lokal:
-> `python -m http.server 8090`, lalu buka `http://localhost:8090`.
+- Profile and availability status
+- Selected work with category filters (All / Projects / Experiments)
+- Experience, education, licenses and certifications, and toolkit
+- Contact details with copy-to-clipboard support
 
----
+It also includes a custom canvas ink cursor, a View Transitions theme switch, scroll-reveal animations, and an ambient paper texture. All motion is disabled when the visitor prefers reduced motion.
 
-## 📁 Struktur Proyek
+## Tech stack
+
+| Layer | Details |
+| --- | --- |
+| Markup | HTML5 |
+| Styling | CSS3, Tailwind CSS 3 (precompiled) |
+| Behavior | Vanilla JavaScript (ES2020+) |
+| Fonts | Inter and JetBrains Mono (self-hosted, latin subset) |
+| Hosting | Any static file host; `_headers` provided for Cloudflare Pages |
+
+There is no build step and no package manager is required to run the site. Tailwind is compiled ahead of time into a single ~13 KB stylesheet.
+
+## Project structure
 
 ```text
 .
-├── index.html                  Halaman + seluruh konten statis
+├── index.html                  Page markup and all static content
 ├── assets/
 │   ├── css/
-│   │   ├── main.css            Gaya kustom: tema, kursor, animasi
-│   │   ├── fonts.css           @font-face font self-hosted
-│   │   └── tailwind.css        Tailwind hasil compile (jangan diedit manual)
+│   │   ├── main.css            Theme tokens, cursor, animations, components
+│   │   ├── fonts.css           @font-face declarations
+│   │   └── tailwind.css        Compiled Tailwind output (do not edit)
 │   ├── js/
-│   │   └── main.js             Data proyek, filter, tema, kursor tinta
-│   ├── fonts/                  Inter & JetBrains Mono (subset latin)
-│   └── icons/                  Favicon (ico, 32px, 512px)
+│   │   └── main.js             Projects data, filtering, theme, ink cursor
+│   ├── fonts/                  Self-hosted Inter and JetBrains Mono
+│   └── icons/                  Favicons
 ├── docs/
-│   ├── README.md               Dokumentasi rinci + screenshot
-│   ├── thumbnail.png           Gambar preview
-│   ├── screenshots/            Screenshot desktop & mobile
-│   └── licenses/               Lisensi font (SIL OFL 1.1)
-├── _headers                    Security + cache headers (Cloudflare Pages)
-├── tailwind.config.js          Konfigurasi compile Tailwind
-├── tailwind.input.css          Entry point Tailwind
+│   ├── README.md               Detailed project documentation
+│   ├── thumbnail.png           Social/preview image
+│   ├── screenshots/            Desktop and mobile screenshots
+│   └── licenses/               Font licenses (SIL OFL 1.1)
+├── _headers                    Security and cache headers for Cloudflare Pages
+├── tailwind.config.js          Tailwind configuration
+├── tailwind.input.css          Tailwind entry point
 ├── CHANGELOG.md
 └── LICENSE
 ```
 
----
+## Getting started
 
-## ✏️ Cara Mengedit Konten
+### Preview locally
 
-1. **Nama, Bio, dan Kontak**:
-   Buka `index.html`, ubah:
-   - Nama: `Navid Athallah`
-   - Bio / deskripsi diri
-   - Riwayat kerja di bagian `Experience`
-   - Email: `navidvkt@gmail.com`
-   - Tautan sosial (GitHub, X, LinkedIn) di bagian `Contact`
+The quickest option is to open `index.html` directly in a browser. Some browsers block custom fonts for `file://` pages, so use a local server for a preview that matches production.
 
-2. **Daftar Proyek / Karya**:
-   Buka `assets/js/main.js`, edit atau tambahkan karya Anda di array `PROJECTS`:
-   ```javascript
-   {
-     id: "nama-proyek",
-     title: "Nama Proyek",
-     category: "projects", // atau "experiments"
-     year: "2026",
-     description: "Deskripsi singkat dan jujur tentang apa yang dibuat.",
-     tags: ["Figma", "Tailwind", "TypeScript"],
-     link: "https://tautan-proyek.com",
-     previewHint: "Web Application • 1440px viewport"
-   }
-   ```
+```bash
+python -m http.server 8090
+```
 
-3. **Menambah class Tailwind baru**:
-   `assets/css/tailwind.css` sudah berisi semua utility yang dipakai saat ini. Kalau Anda
-   menambahkan class Tailwind baru di `index.html`/`assets/js/main.js`, regenerate sekali
-   (butuh koneksi internet, tidak meng-install apa pun secara permanen):
-   ```bash
-   npx tailwindcss@3 -c tailwind.config.js -i tailwind.input.css -o assets/css/tailwind.css --minify
-   ```
+Then open <http://localhost:8090>. Any static file server works.
 
-4. **Mengganti font**: taruh file `.woff2` di `assets/fonts/`, perbarui
-   `assets/css/fonts.css`, lalu sesuaikan `<link rel="preload">` di `index.html`.
+## Customization
 
----
+### Page content
 
-## 🌐 Deploy Gratis
+Profile, experience, education, certifications, toolkit, and contact information are written directly in `index.html`.
 
-Karena merupakan static website murni:
-- **GitHub Pages**: Buat repository GitHub, upload file-file ini, lalu nyalakan Pages di *Settings > Pages*.
-- **Vercel / Netlify**: Cukup drag-and-drop folder ini ke dashboard Vercel/Netlify.
-- **Cloudflare Pages**: `_headers` otomatis dipakai untuk CSP, HSTS, dan cache font/ikon.
+### Projects
 
----
+The project list is defined in the `PROJECTS` array in `assets/js/main.js`:
 
-## 📖 Dokumentasi
+```javascript
+{
+  id: "project-id",
+  title: "Project name",
+  category: "projects", // "projects" or "experiments"
+  year: "2026",
+  description: "A short, factual summary of the project.",
+  tags: ["TypeScript", "React", "Cloudflare"],
+  link: "https://github.com/example/project",
+  previewHint: "Web App • React"
+}
+```
 
-Penjelasan fitur, screenshot, dan catatan teknis ada di [`docs/README.md`](./docs/README.md).
-Riwayat perubahan ada di [`CHANGELOG.md`](./CHANGELOG.md).
+### Styling
 
----
+- `assets/css/main.css` contains the theme tokens, ink cursor, reveal animations, filter states, and other custom styles.
+- `assets/css/tailwind.css` is generated output. Do not edit it manually.
+- `assets/css/fonts.css` declares the self-hosted fonts.
 
-## Lisensi & penggunaan
+### Rebuilding Tailwind
 
-Repositori ini **bukan open source**. Seluruh kode dan konten dilindungi hak cipta (© 2026 Navid Athallah) dan dipublikasikan hanya untuk dilihat serta dievaluasi — misalnya untuk review portofolio, rekrutmen, atau laporan akademik.
+Regenerate the stylesheet after adding or removing utility classes in `index.html` or `assets/js/main.js`:
 
-Tidak ada izin untuk menyalin, memodifikasi, menyebarkan, atau memakai ulang karya ini, baik sebagian maupun seluruhnya, tanpa izin tertulis. Detailnya ada di [LICENSE](./LICENSE).
+```bash
+npx tailwindcss@3 -c tailwind.config.js -i tailwind.input.css -o assets/css/tailwind.css --minify
+```
+
+The command downloads the Tailwind CLI temporarily; nothing is installed globally.
+
+### Fonts
+
+Place any additional `.woff2` files in `assets/fonts/`, add the corresponding `@font-face` rules in `assets/css/fonts.css`, and update the preload links in `index.html`.
+
+## Accessibility
+
+- Semantic sectioning and heading order
+- `aria-pressed` states on project filters and `aria-controls` on their trigger buttons
+- `role="status"` and `aria-live` for copy feedback
+- Full `prefers-reduced-motion` support
+- `<noscript>` fallback so content remains visible without JavaScript
+
+## Deployment
+
+The site is fully static. Use the repository root as the publish directory, leave the build command empty, and set the output directory to `/`.
+
+- **Cloudflare Pages** — `_headers` is applied automatically for CSP, HSTS, and asset caching.
+- **GitHub Pages, Netlify, Vercel** — deploy the repository root. Custom response headers from `_headers` are Cloudflare-specific.
+
+## Documentation
+
+See [`docs/README.md`](docs/README.md) for a detailed content map, implementation notes, and screenshots. Changes are recorded in [`CHANGELOG.md`](CHANGELOG.md).
+
+## License
+
+Copyright © 2026 Navid Athallah. All rights reserved.
+
+This repository is published for viewing and evaluation only. No permission is granted to copy, modify, redistribute, sublicense, or reuse the work, in whole or in part, without prior written permission. See [`LICENSE`](LICENSE) for the full terms.
+
+## Contact
+
+- Email: [navidvkt@gmail.com](mailto:navidvkt@gmail.com)
+- GitHub: [@enpidi26](https://github.com/enpidi26)
