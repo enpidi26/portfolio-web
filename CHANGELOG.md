@@ -2,6 +2,13 @@
 
 ---
 
+## [v1.8] — 2026-11-19
+
+### Changed
+- Updated the Toolkit section with the current skill set and section label.
+
+---
+
 ## [v1.7] — 2026-11-19
 
 ### Documentation
